@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pubgolf Zakynthos 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="blob b1" aria-hidden="true"></div><div class="blob b2" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="chips-top"><span class="stamp accent">Laganas Strip · Sept 2027</span><span class="stamp" id="countdown"></span></div>
+    <h1><span class="line">Pubgolf</span><span class="line">Zakynthos</span></h1>
+    <p class="sub">Quiz, drankjes en punten van bar naar bar langs de Strip.</p>
+    <div class="stats"><div><b>9</b><span>vragen</span></div><div><b>9</b><span>bars</span></div><div><b>6</b><span>vrienden</span></div></div>
+  </div>
+  <div class="waves" aria-hidden="true">
+    <svg class="w1" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 50 Q180 10 360 50 T720 50 T1080 50 T1440 50 T1800 50 T2160 50 T2520 50 T2880 50 V120 H0 Z" fill="#cfe0ff" opacity=".7"/></svg>
+    <svg class="w2" viewBox="0 0 3000 120" preserveAspectRatio="none"><path d="M0 70 Q150 40 300 70 T600 70 T900 70 T1200 70 T1500 70 T1800 70 T2100 70 T2400 70 T2700 70 T3000 70 V120 H0 Z" fill="#f4f6fb"/></svg>
+  </div>
+</header>
+
+<div class="bar"><div class="bar-inner"><nav class="tabs" id="tabs" role="tablist" aria-label="Holes"></nav></div></div>
+
+<main id="main"></main>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+const DATA = JSON.parse(decodeURIComponent(escape(atob("eyJzdG9wcyI6IFt7Im4iOiAiQ2FwdGFpbiBNb3JnYW4iLCAidHlwZSI6ICJDYWbDqS1iYXIiLCAiZmFjdCI6ICJPcCBkZSBTdHJpcCB6ZWxmOiBvdmVyZGFnIGNhZsOpLCAncyBhdm9uZHMgYmFyLiBSdXN0aWdlIHN0YXJ0LiJ9LCB7Im4iOiAiU3VnYXIiLCAidHlwZSI6ICJCYXIiLCAiZmFjdCI6ICJCYXIgZW4gY2x1YiBvcCBkZSBob29mZHN0cmFhdCB2YW4gZGUgU3RyaXAsIGdlcm9lbWQgb20gZGUgY29ja3RhaWxzLiJ9LCB7Im4iOiAiSWtvbiBCYXIiLCAidHlwZSI6ICJCYXIiLCAiZmFjdCI6ICJDZW50cmFhbCBvcCBkZSBTdHJpcCwgbWV0IERKJ3MgZW4gZWVuIHJ1aW1lIGRyYW5ra2FhcnQuIn0sIHsibiI6ICJaZXJvcyIsICJ0eXBlIjogIlN1cGVyY2x1YiIsICJmYWN0IjogIkdyb3RlIGJ1aXRlbmJhciB2b29yYWFuOyBiYXJtYW5uZW4gbWV0IHZ1dXJzaG93cy4ifSwgeyJuIjogIlJlc2N1ZSIsICJ0eXBlIjogIlN1cGVyY2x1YiIsICJmYWN0IjogIlZsYWsgbmFhc3QgWmVyb3MuIE1lZXIgZGFuIDIwMDAgcGxhYXRzZW4sIDMgemFsZW4sIDYgYmFycy4ifSwgeyJuIjogIlNpenpsZSIsICJ0eXBlIjogIkNsdWIiLCAiZmFjdCI6ICJDZW50cmFhbCBvcCBkZSBTdHJpcCwgdm9vcmFsIGhvdXNlLiJ9LCB7Im4iOiAiV2Fpa2lraSIsICJ0eXBlIjogIkNsdWIiLCAiZmFjdCI6ICJDZW50cmFhbCwgdXJiYW4vUiZCLCBtZXQgemljaHQgb3AgemVlLiJ9LCB7Im4iOiAiQ2hlcnJ5IEJheSIsICJ0eXBlIjogIkNsdWIiLCAiZmFjdCI6ICJPbmRlcmFhbiBkZSBTdHJpcCByaWNodGluZyB6ZWU7IGRhbnNlbiBvcCBkZSBiYXIuIn0sIHsibiI6ICJNYWxpYm9veiBCZWFjaCBCYXIiLCAidHlwZSI6ICJTdHJhbmRiYXIiLCAiZmFjdCI6ICJPcCBoZXQgc3RyYW5kIHZhbiBMYWdhbmFzLCBvcGVuIHRvdCAzIHV1ciAncyBuYWNodHMuIEhpZXIgZWluZGlndCBoZXQuIn1dLCAicXMiOiBbeyJzIjogMCwgInQiOiAiV2F0IGJldGVrZW50IFwiWWFtYXNcIj8iLCAibyI6IFsiUHJvb3N0LCBvcCBvbnplIGdlem9uZGhlaWQiLCAiRGFuayBqZSIsICJOb2cgw6nDqW4iXSwgImMiOiAwLCAicGVuIjogeyIxIjogIlNob3QgdGVxdWlsYSIsICIyIjogIlNob3Qgb3V6byJ9fSwgeyJzIjogMSwgInQiOiAiSG9lIHplZyBqZSBcImJpZXJcIiBpbiBoZXQgR3JpZWtzPyIsICJvIjogWyJLcmFzaSIsICJCaXJhIiwgIk5lcm8iXSwgImMiOiAxLCAicGVuIjogeyIwIjogIlNob3Qgb3V6byIsICIyIjogIlNob3QgdGVxdWlsYSJ9fSwgeyJzIjogMiwgInQiOiAiV2F0IGJldGVrZW50IFwiVG8gbG9nYXJpYXNtbywgcGFyYWthbG9cIj8iLCAibyI6IFsiTm9nIGVlbiByb25kamUsIGdyYWFnIiwgIldhYXIgaXMgaGV0IHRvaWxldD8iLCAiRGUgcmVrZW5pbmcsIGFsc2plYmxpZWZ0Il0sICJjIjogMiwgInBlbiI6IHsiMCI6ICJTaG90IHRlcXVpbGEiLCAiMSI6ICJTaG90IG91em8ifX0sIHsicyI6IDMsICJ0IjogIkhvZSBoZWV0IGRlIGhvb2dzdGUgYmVyZyB2YW4gWmFreW50aG9zPyIsICJvIjogWyJPbHltcHVzIiwgIlBhbnRva3JhdG9yIiwgIlZyYWNoaW9uYXMiXSwgImMiOiAyLCAicGVuIjogeyIwIjogIlNob3QgSsOkZ2VybWVpc3RlciIsICIxIjogIlNob3QgdGVxdWlsYSJ9fSwgeyJzIjogNCwgInQiOiAiV2Vsa2UgZGljaHRlciB1aXQgWmFreW50aG9zIHNjaHJlZWYgZGUgdGVrc3QgdmFuIGhldCBHcmlla3NlIHZvbGtzbGllZD8iLCAibyI6IFsiS2F2YWZpcyIsICJEaW9ueXNpb3MgU29sb21vcyIsICJIb21lcnVzIl0sICJjIjogMSwgInBlbiI6IHsiMCI6ICJTaG90IHRlcXVpbGEiLCAiMiI6ICJKw6RnZXJib21iIn19LCB7InMiOiA1LCAidCI6ICJXYXQgaXMgXCJzb3V2bGFraVwiPyIsICJvIjogWyJWbGVlcyBhYW4gZWVuIHNwaWVzIiwgIkdldnVsZGUgd2lqbmJsYWRlcmVuIiwgIkdlYmFra2VuIGthYXMiXSwgImMiOiAwLCAicGVuIjogeyIxIjogIlNob3Qgb3V6byIsICIyIjogIlNob3QgdGVxdWlsYSJ9fSwgeyJzIjogNiwgInQiOiAiV2F0IGJldGVrZW50IFwiTmVcIiBpbiBoZXQgR3JpZWtzPyIsICJvIjogWyJOZWUiLCAiSmEiLCAiTWlzc2NoaWVuIl0sICJjIjogMSwgInBlbiI6IHsiMCI6ICJKw6RnZXJib21iIiwgIjIiOiAiU2hvdCB2b2RrYSJ9fSwgeyJzIjogNywgInQiOiAiSW4gd2VsayBqYWFyIHZlcndvZXN0dGUgZWVuIHp3YXJlIGFhcmRiZXZpbmcgYmlqbmEgaGVlbCBaYWt5bnRob3Mtc3RhZD8iLCAibyI6IFsiMTkyMyIsICIxOTQ4IiwgIjE5NTMiXSwgImMiOiAyLCAicGVuIjogeyIwIjogIlNob3Qgdm9ka2EiLCAiMSI6ICJTaG90IErDpGdlcm1laXN0ZXIifX0sIHsicyI6IDgsICJ0IjogIldhdCBnZWJldXJ0IGVyIG1ldCBvdXpvIGFscyBqZSBlciB3YXRlciBvZiBpanMgYmlqIGRvZXQ/IiwgIm8iOiBbIkhpaiB3b3JkdCB3aXQgZW4gdHJvZWJlbCIsICJIaWogd29yZHQgYmxhdXciLCAiRXIgdmVyYW5kZXJ0IG5pZXRzIl0sICJjIjogMCwgInBlbiI6IHsiMSI6ICJKw6RnZXJib21iIiwgIjIiOiAiU2hvdCB0ZXF1aWxhIn19XX0="))));
+const S = DATA.stops, Q = DATA.qs;
+const KEY = "pubgolf-zakynthos-v5";
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const PTS = 3, JOKERS = 2, L = ["A", "B", "C"];
+let state = { v: 5, view: "start", players: ["Arthur", "Thomas", "Seppe", "Loïc", "Landuyt", "Yarne"], picks: {}, open: {}, jok: {} };
+const $ = (s) => document.querySelector(s);
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+function load() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; } }
+
+const qLabel = (i) => "Hole " + (i + 1);
+function jokUsed(p) { return Object.keys(state.jok).filter((k) => state.jok[k] && k.endsWith("|" + p)).length; }
+function result(i, p) {
+  if (!state.open[i]) return null;
+  const pick = state.picks[i + "|" + p]; if (pick == null) return null;
+  const q = Q[i];
+  if (pick === q.c) return { ok: true, pts: PTS, drink: "Biertje" };
+  if (state.jok[i + "|" + p]) return { ok: false, pts: -1, drink: "Glas water", water: true };
+  return { ok: false, pts: 0, drink: q.pen[pick] };
+}
+function totals(p) {
+  let pts = 0, ok = 0, shots = 0, played = 0;
+  Q.forEach((q, i) => { const r = result(i, p); if (r) { played++; pts += r.pts; if (r.ok) ok++; else if (!r.water) shots++; } });
+  return { pts, ok, shots, played };
+}
+function countdown() {
+  const days = Math.ceil((new Date(2027, 8, 1) - new Date()) / 86400000);
+  $("#countdown").textContent = days > 0 ? `Nog ${days} dagen` : "Yamas!";
+}
+
+function renderTabs() {
+  const items = [["start", "Start", "wide"]];
+  Q.forEach((q, i) => items.push([String(i), String(i + 1), ""]));
+  items.push(["stand", "Stand", "wide stop-start"]);
+  $("#tabs").innerHTML = items.map(([v, l, c]) =>
+    `<button class="tab ${c} ${/^\d+$/.test(v) && state.open[v] ? "done" : ""}" role="tab" data-v="${v}" aria-selected="${state.view === v}"
+      aria-label="${/^\d+$/.test(v) ? qLabel(+v) + ", " + esc(S[Q[+v].s].n) : l}">${l}</button>`).join("");
+  const a = document.querySelector('.tab[aria-selected="true"]');
+  if (a) a.scrollIntoView({ inline: "center", block: "nearest", behavior: REDUCED ? "auto" : "smooth" });
+}
+
+function viewStart() {
+  const route = S.map((s, n) => {
+    const idx = Q.map((q, i) => q.s === n ? i : -1).filter((i) => i >= 0);
+    const lab = idx.map((i) => i + 1).join(" · ");
+    return `<li><span class="dot">${n + 1}</span><div><div class="rn">${esc(s.n)}</div><div class="rf">${esc(s.type)} · ${esc(s.fact)}</div></div><span class="rq">${lab}</span></li>`;
+  }).join("");
+  return `
+  <section class="panel rules">
+    <p class="kicker">Spelregels</p>
+    <h2>Zo werkt het</h2>
+    <ol>
+      <li>Per hole leest één iemand de vraag voor met de opties <b>A, B en C</b>.</li>
+      <li>Iedereen kiest tegelijk door 1, 2 of 3 vingers op te steken. De scorebewaarder tikt de keuzes in.</li>
+      <li><b>Juist</b>: je drinkt een <b>biertje</b> en krijgt <b>+${PTS} punten</b>.</li>
+      <li><b>Fout</b>: 0 punten, en je drinkt het <b>strafdrankje</b> dat bij jouw foute antwoord hoort.</li>
+      <li>Elke speler heeft <b>${JOKERS} water-jokers</b>: water in plaats van het strafdrankje, maar <b>−1 punt</b>.</li>
+      <li>Eén vraag per bar, 9 holes in totaal. Wie na hole 9 de meeste punten heeft, wint.</li>
+      <li><b>Eindstraf:</b> de <b>2 spelers met de minste punten</b> springen met hun kleren aan in het zwembad zodra jullie thuiskomen.</li>
+    </ol>
+  </section>
+  <section class="panel">
+    <p class="kicker">Spelers</p>
+    <h2>De groep van 6</h2>
+    <div class="names">${state.players.map((p, i) => `<label class="sr" for="pl-${i}">Naam speler ${i + 1}</label><input id="pl-${i}" data-pl="${i}" maxlength="18" value="${esc(p)}" autocomplete="off">`).join("")}</div>
+    <p class="hint">Tik op een naam om hem te wijzigen. Eén persoon houdt de scores bij op deze gsm.</p>
+  </section>
+  <section class="panel">
+    <p class="kicker">Route langs de Strip in Laganas</p>
+    <h2>9 holes, 9 bars</h2>
+    <ol class="route">${route}</ol>
+    <p class="hint">Alle stops liggen op of vlak naast de Strip, op wandelafstand van elkaar. De exacte volgorde ken ik niet: loop gewoon van boven naar het strand en wissel stops om als dat korter is.</p>
+  </section>
+  <div class="nav"><button type="button" data-go="0">Start bij ${esc(S[0].n)}</button></div>
+  <p class="sources">Bars gecontroleerd in gidsen en reviews uit 2026. Kijk in september 2027 ter plekke of alles nog open is.
+  Bronnen: <a href="https://europenightlife.com/greece/zakynthos/laganas-strip-nightlife">EuropeNightlife (2026)</a>, <a href="https://www.zantebible.com/post/best-beachfront-bars-in-laganas-zante-your-ultimate-2026-guide">Zante Bible (2026)</a>, <a href="https://www.tripadvisor.com/Attraction_Review-g658915-d8668662-Reviews-Sugar-Laganas_Zakynthos_Ionian_Islands.html">Tripadvisor: Sugar</a>, <a href="https://wanderlog.com/list/geoCategory/242142/best-bars-and-drinks-in-kalamaki">Wanderlog</a>, <a href="https://www.partyhardtravel.com/zante/news/zante-strip">Party Hard Travel</a>.</p>`;
+}
+
+function viewQ(i) {
+  const q = Q[i], s = S[q.s], open = !!state.open[i];
+  const opts = q.o.map((o, n) => {
+    const cls = open ? (n === q.c ? "right" : "wrong") : "";
+    return `<div class="opt ${cls}"><span class="l">${L[n]}</span><span>${esc(o)}</span>${open ? `<span class="drinkline">${n === q.c ? "Juist: biertje + " + PTS + " punten" : "Fout: " + esc(q.pen[n])}</span>` : ""}</div>`;
+  }).join("");
+  const allPicked = state.players.every((p) => state.picks[i + "|" + p] != null);
+  const rows = state.players.map((p) => {
+    const k = i + "|" + p, pick = state.picks[k], r = result(i, p);
+    const left = JOKERS - jokUsed(p) + (state.jok[k] ? 1 : 0);
+    return `<div class="row">
+      <span class="name">${esc(p)}</span>
+      <div class="pick" role="group" aria-label="Antwoord van ${esc(p)}">${L.map((l, n) => `<button type="button" data-pk="${esc(k)}" data-n="${n}" aria-pressed="${pick === n}" ${open ? "disabled" : ""}>${l}</button>`).join("")}</div>
+      ${r ? `<div class="res">
+        <span class="tag ${r.ok ? "beer" : r.water ? "water" : "shot"}">${esc(r.drink)}</span>
+        <span class="tag pts">${r.pts > 0 ? "+" : ""}${r.pts} pt</span>
+        ${r.ok ? "" : `<button type="button" class="jok" data-jk="${esc(k)}" aria-pressed="${!!state.jok[k]}" ${left > 0 ? "" : "disabled"}>Water-joker (${Math.max(0, JOKERS - jokUsed(p))} over)</button>`}
+      </div>` : ""}
+    </div>`;
+  }).join("");
+  const next = i < Q.length - 1 ? (Q[i + 1].s !== q.s ? `Op naar ${S[Q[i + 1].s].n}` : `Naar ${qLabel(i + 1).toLowerCase()}`) : "Bekijk de eindstand";
+  return `
+  <section class="panel hole-head">
+    <svg class="flag" viewBox="0 0 54 70" aria-hidden="true"><rect x="4" y="4" width="3" height="64" rx="1.5" fill="#fff"/><path d="M7 6 L48 16 L7 28 Z" fill="${i === 8 ? "#ffb22e" : "#ff5f6d"}"/></svg>
+    <p class="kicker">${qLabel(i)} van 9</p>
+    <h2>${esc(s.n)}</h2>
+    <div class="pills"><span class="pill">${esc(s.type)}</span><span class="pill par">Juist = bier + ${PTS}</span></div>
+    <p class="fact">${esc(s.fact)}</p>
+  </section>
+  <section class="panel ${open ? "revealed" : ""}">
+    <p class="kicker">Vraag ${i + 1}</p>
+    <h2 style="font-size:26px;margin-bottom:0">${esc(q.t)}</h2>
+    <div class="opts">${opts}</div>
+  </section>
+  <section class="panel">
+    <h3>${open ? "Wie drinkt wat?" : "Wie kiest wat?"}</h3>
+    <div class="rows">${rows}</div>
+  </section>
+  ${open ? "" : `<button type="button" class="reveal-btn" id="reveal" ${allPicked ? "" : "disabled"}>${allPicked ? "Onthul het antwoord" : "Tik eerst voor iedereen A, B of C"}</button>`}
+  <div class="nav">
+    <button type="button" class="prev" data-go="${i === 0 ? "start" : i - 1}">Terug</button>
+    <button type="button" data-go="${i < Q.length - 1 ? i + 1 : "stand"}">${esc(next)}</button>
+  </div>`;
+}
+
+function penaltyPanel(list, played) {
+  if (!played) return `<section class="panel penalty"><p class="kicker">Eindstraf</p><h2>Zwembad met kleren aan</h2><p class="hint" style="margin-top:0">De 2 spelers met de minste punten springen in het zwembad zodra jullie thuiskomen. Speel eerst een paar vragen.</p></section>`;
+  const asc = [...list].reverse(), cut = asc[1];
+  const losers = asc.filter((r, i) => i < 2 || (r.pts === cut.pts && r.ok === cut.ok));
+  const done = played === 9;
+  return `<section class="panel penalty">
+    <p class="kicker">${done ? "Eindstraf" : "Staan nu onderaan"}</p>
+    <h2>${done ? "Springen maar!" : "In gevaar voor het zwembad"}</h2>
+    <div class="losers">${losers.map((r) => `<span class="loser"><b>${esc(r.p)}</b> ${r.pts} pt</span>`).join("")}</div>
+    <p class="hint">${done ? "Zodra jullie thuis zijn, springen zij met hun kleren aan in het zwembad." : "De 2 spelers met de minste punten springen op het einde met hun kleren aan in het zwembad."}${losers.length > 2 ? " Gelijke stand op de laatste plaatsen: dan springen alle spelers met dezelfde score." : ""}</p>
+  </section>`;
+}
+
+function viewStand() {
+  const list = state.players.map((p) => ({ p, ...totals(p), j: jokUsed(p) })).sort((a, b) => b.pts - a.pts || b.ok - a.ok);
+  const played = Object.keys(state.open).length;
+  const lb = list.map((r, n) => `
+    <div class="lb-row ${n === 0 && played ? "first" : ""}">
+      <span class="rank">${n + 1}</span>
+      <div><div class="lb-name">${esc(r.p)}</div><div class="lb-sub">${r.ok} juist · ${r.shots} strafdrankje${r.shots === 1 ? "" : "s"} · ${r.j} joker${r.j === 1 ? "" : "s"}</div></div>
+      <div class="lb-tot">${r.pts}<small>punten</small></div>
+    </div>`).join("");
+  return `
+  <section class="panel">
+    <p class="kicker">Klassement · ${played} van 9 vragen gespeeld</p>
+    <h2>${played === 9 ? "Eindstand" : "Tussenstand"}</h2>
+    <div class="lb">${lb}</div>
+    <p class="hint">Bij gelijke punten wint wie de meeste vragen juist had.</p>
+  </section>
+  ${penaltyPanel(list, played)}
+  <button class="reset" id="reset" type="button">Nieuw spel: alle antwoorden wissen</button>`;
+}
+
+function render(animate) {
+  renderTabs();
+  const v = state.view, m = $("#main");
+  m.innerHTML = v === "start" ? viewStart() : v === "stand" ? viewStand() : viewQ(+v);
+  m.classList.remove("enter"); if (animate && !REDUCED) { void m.offsetWidth; m.classList.add("enter"); }
+}
+function go(v) {
+  state.view = String(v); save(); render(true);
+  const top = $(".hero").offsetHeight; if (scrollY > top) scrollTo({ top, behavior: REDUCED ? "auto" : "smooth" });
+  if (state.view === "stand" && Object.keys(state.open).length === 9) burst(innerWidth / 2, innerHeight / 3, 140);
+}
+
+$("#tabs").addEventListener("click", (e) => { const b = e.target.closest(".tab"); if (b && b.dataset.v !== state.view) go(b.dataset.v); });
+$("#main").addEventListener("input", (e) => {
+  const i = e.target.dataset.pl; if (i == null) return;
+  const old = state.players[+i], nv = e.target.value.trim() || `Speler ${+i + 1}`;
+  if (state.players.includes(nv) && nv !== old) return;
+  for (const o of [state.picks, state.jok]) for (const k of Object.keys(o)) if (k.endsWith("|" + old)) { o[k.slice(0, -old.length) + nv] = o[k]; delete o[k]; }
+  state.players[+i] = nv; save();
+});
+$("#main").addEventListener("click", (e) => {
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.dataset.go != null) { go(t.dataset.go); return; }
+  if (t.dataset.pk) { const k = t.dataset.pk, n = +t.dataset.n; if (state.picks[k] === n) delete state.picks[k]; else state.picks[k] = n; save(); render(false); return; }
+  if (t.dataset.jk) { const k = t.dataset.jk; if (state.jok[k]) delete state.jok[k]; else state.jok[k] = true; save(); render(false); return; }
+  if (t.id === "reveal") {
+    const i = +state.view; state.open[i] = true; save(); render(false);
+    const allOk = state.players.every((p) => result(i, p).ok);
+    burst(innerWidth / 2, innerHeight / 3, allOk ? 160 : 70);
+    return;
+  }
+  if (t.id === "reset") {
+    if (t.dataset.armed) { state.picks = {}; state.open = {}; state.jok = {}; state.view = "start"; save(); render(true); scrollTo({ top: 0 }); }
+    else { t.dataset.armed = "1"; t.textContent = "Zeker weten? Tik nog een keer. De namen blijven staan."; }
+  }
+});
+
+/* ---------- Confetti ---------- */
+const cf = $("#confetti"), cc = cf.getContext("2d"); let parts = [], running = false;
+function sizeCf() { const d = Math.min(devicePixelRatio || 1, 2); cf.width = innerWidth * d; cf.height = innerHeight * d; cc.setTransform(d, 0, 0, d, 0, 0); }
+sizeCf(); addEventListener("resize", sizeCf);
+const COLS = ["#2461ff", "#00b8a9", "#ffb020", "#ff6b4a", "#8fb2ff", "#0b1b33"];
+function burst(x, y, n) {
+  if (REDUCED) return;
+  for (let i = 0; i < n; i++) { const a = Math.random() * 6.283, s = 3 + Math.random() * 6;
+    parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 4, r: Math.random() * 6.28, vr: (Math.random() - .5) * .3, w: 5 + Math.random() * 6, h: 3 + Math.random() * 4, c: COLS[i % COLS.length], life: 70 + Math.random() * 40 }); }
+  if (!running) { running = true; requestAnimationFrame(tick); }
+}
+function tick() {
+  cc.clearRect(0, 0, innerWidth, innerHeight); parts = parts.filter((p) => p.life > 0);
+  for (const p of parts) { p.vy += .22; p.vx *= .985; p.x += p.vx; p.y += p.vy; p.r += p.vr; p.life--;
+    cc.save(); cc.translate(p.x, p.y); cc.rotate(p.r); cc.globalAlpha = Math.min(1, p.life / 30); cc.fillStyle = p.c; cc.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); cc.restore(); }
+  if (parts.length) requestAnimationFrame(tick); else { running = false; cc.clearRect(0, 0, innerWidth, innerHeight); }
+}
+
+/* ---------- Boot ---------- */
+function start(snap) {
+  const saved = (snap && snap.v === 5 && snap.players) ? snap : load();
+  if (saved && saved.v === 5 && Array.isArray(saved.players) && saved.players.length === 6) state = Object.assign(state, saved);
+  countdown(); render(true);
+}
+window.claude?.hot?.snapshot?.(() => state);
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
+</body>
+</html>
